@@ -1,0 +1,140 @@
+#!/bin/bash
+# Solveniare One-Click AI Workflow
+# Purpose: Install WordPress + custom theme + prepare AI prompts + Tawk.to integration
+
+echo "=== Starting Solveniare AI One-Click Setup ==="
+
+# Step 0: Variables
+WP_FOLDER="wp"
+THEME_FOLDER="wp-content/themes/solveniare"
+TAWKTO_PLACEHOLDER="YOUR_TAWKTO_ID"
+
+# Step 1: Download WordPress
+echo "Downloading WordPress..."
+wget https://wordpress.org/latest.tar.gz
+tar -xzvf latest.tar.gz
+mkdir -p $WP_FOLDER
+mv wordpress/* $WP_FOLDER/
+rm -rf wordpress latest.tar.gz
+echo "WordPress installed in $WP_FOLDER."
+
+# Step 2: Copy sample config
+cp $WP_FOLDER/wp-config-sample.php $WP_FOLDER/wp-config.php
+echo "Update wp-config.php with your DB credentials before running WP install."
+
+# Step 3: Setup Theme folder & files
+echo "Creating theme folder and files..."
+mkdir -p $THEME_FOLDER
+
+# style.css
+cat > $THEME_FOLDER/style.css <<EOL
+/*
+Theme Name: Solveniare
+Author: CEO
+Description: Solveniare Custom Theme
+Version: 1.0
+*/
+EOL
+
+# index.php
+cat > $THEME_FOLDER/index.php <<EOL
+<?php get_header(); ?>
+<h1>Welcome to Solveniare</h1>
+<p>Smart Solutions & Automation for Growth</p>
+<?php get_footer(); ?>
+EOL
+
+# home.php
+cat > $THEME_FOLDER/home.php <<EOL
+<?php get_header(); ?>
+
+<section id="hero">
+  <h1>Smart Solutions & Automation for Growth</h1>
+  <p>Solveniare empowers businesses and individuals to automate, optimize, and grow using innovative tools and AI-driven solutions.</p>
+  <a href="#services" class="cta-button">Explore Our Services</a>
+</section>
+
+<section id="services">
+  <h2>Our Core Services</h2>
+  <div class="service-grid">
+    <div class="service-item">
+      <h3>Business Automation</h3>
+      <p>Streamline your workflows with AI-powered tools and automated processes to save time and resources.</p>
+    </div>
+    <div class="service-item">
+      <h3>Tech Solutions</h3>
+      <p>Custom software and web solutions tailored to your business goals and challenges.</p>
+    </div>
+    <div class="service-item">
+      <h3>Digital Growth Consulting</h3>
+      <p>Strategic advice and hands-on support to grow your online presence and monetization channels.</p>
+    </div>
+  </div>
+</section>
+
+<section id="cta">
+  <h2>Ready to Start?</h2>
+  <p>Contact us today and let's accelerate your growth!</p>
+  <a href="/contact" class="cta-button">Get Started</a>
+</section>
+
+<!-- Tawk.to Live Chat Integration -->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/$TAWKTO_PLACEHOLDER/1abcdefg';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+
+<?php get_footer(); ?>
+EOL
+
+# Other template files
+touch $THEME_FOLDER/functions.php
+touch $THEME_FOLDER/services.php
+touch $THEME_FOLDER/about-contact.php
+touch $THEME_FOLDER/first-blog.php
+touch $THEME_FOLDER/product-landing.php
+
+echo "Theme setup complete."
+
+# Step 4: Create AI Prompts file
+cat > solveniare-ai-prompts.md <<EOL
+# Solveniare AI Page Generation Prompts
+
+## Home Page
+Read solveniare-vision.md. Generate Home page content with tagline, mission, 3 main services, CTA. Provide WP PHP snippet including Tawk.to live chat.
+
+## Services Page
+Generate 3-5 services with descriptions, CTA. Provide WP PHP snippet for services.php.
+
+## About / Contact Page
+Generate About & Contact content with company story, mission, contact form shortcode. Provide WP PHP snippet.
+
+## First Blog Post
+Suggest 5 titles, pick one, generate solution/tutorial blog post with CTA. Provide WP PHP snippet for first-blog.php.
+
+## Digital Product Landing Page
+Generate landing page with benefits, CTA, payment shortcode. Provide WP PHP snippet for product-landing.php.
+
+## Live Chat / AI Agent
+Suggest Tawk.to/AI assistant integration snippet compatible with theme.
+EOL
+
+echo "AI prompts created in solveniare-ai-prompts.md."
+
+# Step 5: Completion message
+echo "=== Solveniare AI One-Click Setup Complete ==="
+echo "Next Steps:"
+echo "- Update wp/wp-config.php with DB credentials"
+echo "- Start local PHP server: php -S localhost:8000 -t wp"
+echo "- Open http://localhost:8000 to run WordPress installation"
+echo "- Use solveniare-ai-prompts.md with Code GPT/OpenAI VS Code extension to generate pages"
+echo "- Copy generated content into theme files (home.php, services.php, etc.)"
+echo "- Install essential plugins: Yoast SEO, Elementor, WPForms"
+echo "- Replace Tawk.to placeholder with your Tawk.to ID"
